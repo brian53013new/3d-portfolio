@@ -5,9 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,     // 解決 GitHub 不支援圖片優化的問題
   },
-  // 如果你的網址最後是 /art-weather-muse/，請取消下面這兩行的註解：
-  // basePath: '/art-weather-muse',
-  // assetPrefix: '/art-weather-muse',
+  // 因為你的專案名為 3d-portfolio，GitHub Pages 會把它放在 /3d-portfolio/ 底下
+  basePath: '/3d-portfolio',
+  assetPrefix: '/3d-portfolio',
 };
 
 export default nextConfig;
