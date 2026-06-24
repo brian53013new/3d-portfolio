@@ -217,18 +217,31 @@ const IntroAnimation = ({ onComplete }) => {
   );
 };
 
-// 2. Home Navigation View (Grid)
-const HomeView = ({ onSelectProject, lang, ui }) => {
-  const projects = [
-    {
-      id: "guitar-advisor",
-      title: ui.projectTitle[lang],
-      type: "Interactive Tool / Web App",
-      desc: ui.projectDesc[lang]
-    }
-    // Future projects can be added here
-  ];
+const projectsData = [
+  {
+    id: "guitar-advisor",
+    title: { en: "Guitar Advisor", zh: "吉他顧問 (Guitar Chord Master)" },
+    type: { en: "Interactive Tool / Web App", zh: "互動式工具 / 網頁應用" },
+    desc: { 
+      en: "A comprehensive tool for guitarists to explore chords and scales across the fretboard. Experiment with different voicings, modes, and find instant auditory feedback.", 
+      zh: "專為吉他手設計的全方位互動工具，協助探索指板上的各類和弦與音階。體驗不同按法、調式，並獲得即時的聽覺回饋。" 
+    },
+    link: "https://brian53013new.github.io/Guitar-Chord-Master/"
+  },
+  {
+    id: "art-weather-muse",
+    title: { en: "ArtWeather Muse 2.0", zh: "藝術天氣嚮導 (ArtWeather Muse 2.0)" },
+    type: { en: "Web Application", zh: "網頁應用" },
+    desc: {
+      en: "A brand new, upgraded art & weather website that combines meteorological data with artistic aesthetics to provide elegant outfit and weather guidance.",
+      zh: "全新升級的藝術天氣網站，將天氣數據與藝術結合，為你提供最具質感的穿搭與氣象指引。"
+    },
+    link: "https://brian53013new.github.io/art-weather-muse2.0/"
+  }
+];
 
+// 2. Home Navigation View (Grid)
+const HomeView = ({ onSelectProject, lang }) => {
   return (
     <motion.div 
       className="flex-1 w-full max-w-7xl mx-auto p-6 md:p-12 pt-32"
@@ -239,7 +252,7 @@ const HomeView = ({ onSelectProject, lang, ui }) => {
     >
       <h2 className="text-3xl font-serif mb-12 opacity-90">{lang === 'zh' ? '專案導覽' : 'Project Directory'}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((proj) => (
+        {projectsData.map((proj) => (
           <motion.div 
             key={proj.id}
             whileHover={{ y: -5, scale: 1.02 }}
@@ -249,11 +262,11 @@ const HomeView = ({ onSelectProject, lang, ui }) => {
           >
             <div>
               <div className="text-[10px] font-sans tracking-widest uppercase opacity-50 mb-4 group-hover:text-[#C5A059] transition-colors">
-                {proj.type}
+                {proj.type[lang]}
               </div>
-              <h3 className="text-2xl font-serif mb-4">{proj.title}</h3>
+              <h3 className="text-2xl font-serif mb-4">{proj.title[lang]}</h3>
               <p className="text-sm font-serif opacity-70 leading-relaxed">
-                {proj.desc}
+                {proj.desc[lang]}
               </p>
             </div>
             <div className="mt-8 flex justify-end">
@@ -269,7 +282,7 @@ const HomeView = ({ onSelectProject, lang, ui }) => {
 };
 
 // 3. Detail View
-const DetailView = ({ lang, ui, onBack, theme }) => {
+const DetailView = ({ project, lang, ui, onBack, theme }) => {
   const [demoFinished, setDemoFinished] = useState(false);
 
   useEffect(() => {
@@ -296,14 +309,14 @@ const DetailView = ({ lang, ui, onBack, theme }) => {
           >
             &larr; {lang === 'zh' ? '返回導覽' : 'Back to Directory'}
           </button>
-          <h1 className="text-5xl md:text-6xl font-serif mb-6">{ui.projectTitle[lang]}</h1>
+          <h1 className="text-5xl md:text-6xl font-serif mb-6">{project.title[lang]}</h1>
           <p className="font-serif italic text-xl opacity-90 mb-12 leading-relaxed">
-            {ui.projectDesc[lang]}
+            {project.desc[lang]}
           </p>
           
           {/* Explicit Dedicated Enter Button */}
           <a 
-            href="https://brian53013new.github.io/Guitar-Chord-Master/" 
+            href={project.link} 
             target="_blank" 
             rel="noopener noreferrer"
             className={`inline-block text-center text-sm font-sans font-bold tracking-[0.2em] uppercase px-8 py-5 rounded-full transition-all duration-300 shadow-xl hover:shadow-[0_0_30px_rgba(197,160,89,0.3)] ${
@@ -325,8 +338,8 @@ const DetailView = ({ lang, ui, onBack, theme }) => {
           transition={{ delay: 0.4, duration: 0.8 }}
         >
           <iframe 
-            src="https://brian53013new.github.io/Guitar-Chord-Master/" 
-            title="Guitar Chord Master Demo"
+            src={project.link} 
+            title={project.title.en}
             className={`w-full h-full border-0 transition-opacity duration-1000 ${demoFinished ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}
           />
           
@@ -387,7 +400,20 @@ const UpdateLogModal = ({ onClose, theme, lang }) => {
         <h2 className="text-3xl font-serif mb-2">{lang === 'zh' ? '系統更新日誌' : 'System Update Log'}</h2>
         <div className="text-[#38BDF8] text-xs tracking-widest uppercase mb-8">v2.0.0 — SYSTEM_REBOOT</div>
 
-        <div className="space-y-6 relative z-10 max-h-[60vh] overflow-y-auto pr-4">
+        <div className="space-y-6 relative z-10 max-h-[60vh] overflow-y-auto pr-4 pb-12">
+          
+          {/* June 24 Update */}
+          <div className={`p-6 rounded-lg border ${theme === 'light' ? 'bg-white/50 border-black/10' : 'bg-white/5 border-white/10'}`}>
+            <h3 className="text-[#38BDF8] font-bold tracking-widest uppercase mb-4 text-sm">[2026-06-24] 天氣系統上線</h3>
+            <ul className="space-y-4 font-serif leading-relaxed text-sm md:text-base opacity-90">
+              <li className="flex gap-4">
+                <span className="text-[#38BDF8] shrink-0">✦</span>
+                <span><strong>{lang === 'zh' ? '藝術天氣嚮導' : 'ArtWeather Muse 2.0'}：</strong>{lang === 'zh' ? '全新升級的天氣網站「ArtWeather Muse 2.0」正式收錄至作品集導覽中。將天氣數據與藝術完美結合，提供穿搭與氣象指引。' : 'The brand new weather site "ArtWeather Muse 2.0" has been officially added to the portfolio. It combines weather data with art to provide outfit and forecast guidance.'}</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* June 23 Update */}
           <div className={`p-6 rounded-lg border ${theme === 'light' ? 'bg-white/50 border-black/10' : 'bg-white/5 border-white/10'}`}>
             <h3 className="text-[#C5A059] font-bold tracking-widest uppercase mb-4 text-sm">[2026-06-23] 重大更新</h3>
             <ul className="space-y-4 font-serif leading-relaxed text-sm md:text-base opacity-90">
@@ -417,15 +443,13 @@ export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [showIntro, setShowIntro] = useState(true);
   const [currentView, setCurrentView] = useState<"home" | "detail">("home");
+  const [activeProjectId, setActiveProjectId] = useState<string>("guitar-advisor");
   const [showLog, setShowLog] = useState(false);
+
+  const activeProject = projectsData.find(p => p.id === activeProjectId) || projectsData[0];
 
   const ui = {
     title: { en: "Portfolio Navigation", zh: "作品集導覽" },
-    projectTitle: { en: "Guitar Advisor", zh: "吉他顧問 (Guitar Chord Master)" },
-    projectDesc: { 
-      en: "A comprehensive tool for guitarists to explore chords and scales across the fretboard. Experiment with different voicings, modes, and find instant auditory feedback.", 
-      zh: "專為吉他手設計的全方位互動工具，協助探索指板上的各類和弦與音階。體驗不同按法、調式，並獲得即時的聽覺回饋。" 
-    },
     visitSite: { en: "Launch Website", zh: "立即前往網站" },
     demo: { en: "Interactive Preview", zh: "即時預覽" },
     footer: { en: "© 2026. This website is in testing phase: please report any issues.", zh: "© 2026. 本網站為測試階段:如有問題，請回報。" },
@@ -473,13 +497,16 @@ export default function Home() {
               <HomeView 
                 key="home"
                 lang={lang} 
-                ui={ui} 
-                onSelectProject={(id) => setCurrentView("detail")} 
+                onSelectProject={(id) => {
+                  setActiveProjectId(id);
+                  setCurrentView("detail");
+                }} 
               />
             )}
             {!showIntro && currentView === "detail" && (
               <DetailView 
                 key="detail"
+                project={activeProject}
                 lang={lang} 
                 ui={ui} 
                 theme={theme}
